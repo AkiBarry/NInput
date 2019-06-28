@@ -1,5 +1,4 @@
 #include "Input.hpp"
-#include "Vector.hpp"
 
 #include <set>
 #include <map>
@@ -13,7 +12,9 @@ namespace
 		bool key_states[2] = { false, false };
 	};
 
+	HWND _target_hwnd = nullptr;
 	std::function<void(UINT uMsg, WPARAM wParam, LPARAM lParam)> interrupt_func = nullptr;
+
 
 	bool data_switch = true;
 
@@ -98,9 +99,8 @@ namespace NInput
 {
 	bool input_blocked = false;
 	bool mouse_locked = true;
-	HWND target_hwnd = FindWindowA(nullptr, "AssaultCube");
 
-	bool Initiate()
+	bool Initiate(HWND target_hwnd)
 	{
 		if (MH_CreateHook(&SetCursorPos, &DetourSetCursorPos,
 			reinterpret_cast<LPVOID*>(&oSetCursorPos)) != MH_OK)
@@ -112,6 +112,8 @@ namespace NInput
 		{
 			return false;
 		}
+
+		_target_hwnd = target_hwnd;
 
 		return wndProc_Old = (WNDPROC)SetWindowLongPtr(target_hwnd, GWL_WNDPROC, (LONG)newWndProc);
 	}
