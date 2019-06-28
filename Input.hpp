@@ -29,6 +29,4 @@ namespace NInput
 
 	extern bool input_blocked;
 	extern bool mouse_locked;
-
-	extern HWND target_hwnd;
 }

@@ -73,7 +73,8 @@ namespace
 		}
 		else
 		{
-			interrupt_func(uMsg, wParam, lParam);
+			if (interrupt_func)
+				interrupt_func(uMsg, wParam, lParam);
 		}
 
 		return CallWindowProc(wndProc_Old, hwnd, uMsg, wParam, lParam);
@@ -120,7 +121,7 @@ namespace NInput
 
 	void Terminate()
 	{
-		SetWindowLongPtr(target_hwnd, GWL_WNDPROC, (LONG)wndProc_Old);
+		SetWindowLongPtr(_target_hwnd, GWL_WNDPROC, (LONG)wndProc_Old);
 	}
 
 	void Update()
@@ -168,14 +169,14 @@ namespace NInput
 	{
 		POINT temp;
 		GetCursorPos(&temp);
-		ScreenToClient(target_hwnd, &temp);
+		ScreenToClient(_target_hwnd, &temp);
 
 		return NMath::CVec2f(temp.x, temp.y);
 	}
 
 	bool IsKeyDown(int32_t key)
 	{
-		if (GetFocus() != target_hwnd)
+		if (GetForegroundWindow() != _target_hwnd)
 			return false;
 
 		if (updated_keys.find(key) != updated_keys.end())
@@ -204,7 +205,7 @@ namespace NInput
 
 	bool WasKeyPressed(int32_t key)
 	{
-		if (GetFocus() != target_hwnd)
+		if (GetForegroundWindow() != _target_hwnd)
 			return false;
 
 		if (updated_keys.find(key) != updated_keys.end())
@@ -236,7 +237,7 @@ namespace NInput
 
 	bool WasKeyReleased(int32_t key)
 	{
-		if (GetFocus() != target_hwnd)
+		if (GetForegroundWindow() != _target_hwnd)
 			return false;
 
 		if (updated_keys.find(key) != updated_keys.end())
