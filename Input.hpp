@@ -6,7 +6,7 @@
 
 namespace NInput
 {
-	bool Initiate();
+	bool Initiate(HWND target_hwnd);
 	void Terminate();
 
 	void Update();
