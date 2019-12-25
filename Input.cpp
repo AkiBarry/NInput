@@ -82,10 +82,10 @@ namespace
 
 	using tSetCursorPos = BOOL(WINAPI *) (int X, int Y);
 
-	// Pointer for calling original MessageBoxW.
+	// Pointer for calling original SetCursorPos
 	tSetCursorPos oSetCursorPos = nullptr;
 
-	// Detour function which overrides MessageBoxW.
+	// Detour function which overrides SetCursorPos
 	BOOL WINAPI DetourSetCursorPos(int X, int Y)
 	{
 		if (!NInput::mouse_locked)
